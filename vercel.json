@@ -1,14 +1,14 @@
 {
   "version": 2,
   "functions": {
-    "proxy.js": {
+    "api/proxy.js": {
       "maxDuration": 10
     }
   },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/proxy.js"
+      "destination": "/api/proxy"
     }
   ]
 }
