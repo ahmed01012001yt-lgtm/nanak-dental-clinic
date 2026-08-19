@@ -1,7 +1,6 @@
 module.exports = async function handler(req, res) {
   const origin = 'https://nanak-dental-clinic-45iqgi8tn-degita-marketing.vercel.app';
   const target = origin + (req.url || '/');
-  const HERO = 'https://images.pexels.com/photos/3881145/pexels-photo-3881145.jpeg?auto=compress&cs=tinysrgb&w=1800';
 
   const upstream = await fetch(target, {
     headers: {
@@ -24,13 +23,8 @@ module.exports = async function handler(req, res) {
 
   let html = await upstream.text();
 
-  // Replace the old low-resolution hero asset at the HTML layer so every browser gets the new image.
-  html = html.replace(
-    /https:\/\/oupovxujjshindzgflgz\.supabase\.co\/functions\/v1\/nanak-assets-v2\?img=hero/gi,
-    HERO
-  );
-
-  // Make appointment CTAs non-navigating in the HTML itself, before JavaScript runs.
+  // Keep the original clinic hero artwork unchanged.
+  // Only make appointment CTAs non-navigating so the popup opens on the same page.
   html = html.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, (full, attrs, inner) => {
     const text = inner.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
     if (!/(request|book).*appointment/i.test(text)) return full;
@@ -50,9 +44,9 @@ module.exports = async function handler(req, res) {
 </style>
 <div class="apt-modal-backdrop" id="appointmentModal" aria-hidden="true"><div class="apt-modal" role="dialog" aria-modal="true" aria-labelledby="appointmentModalTitle"><div class="apt-modal-head"><button class="apt-close" type="button" aria-label="Close appointment form">×</button><h2 id="appointmentModalTitle">Request an Appointment</h2><p>Choose your preferred details and continue the request on WhatsApp.</p></div><form class="apt-form" id="appointmentPopupForm"><div class="apt-field"><label for="aptName">Name *</label><input id="aptName" name="name" autocomplete="name" required></div><div class="apt-field"><label for="aptPhone">Phone *</label><input id="aptPhone" name="phone" inputmode="tel" autocomplete="tel" required></div><div class="apt-field"><label for="aptService">Treatment / Reason</label><select id="aptService" name="service"><option>General consultation</option><option>Dental Implants</option><option>Root Canal</option><option>Orthodontics</option><option>Cosmetic Dentistry</option><option>Crowns / Veneers</option><option>Emergency Dental Care</option><option>Other</option></select></div><div class="apt-field"><label for="aptDate">Preferred Date</label><input id="aptDate" name="date" type="date"></div><div class="apt-field"><label for="aptTime">Preferred Time</label><select id="aptTime" name="time"><option>Flexible</option><option>10 AM – 1 PM</option><option>1 PM – 5 PM</option><option>5 PM – 9 PM</option></select></div><div class="apt-field apt-full"><label for="aptNote">Note</label><textarea id="aptNote" name="message" placeholder="Briefly tell the clinic what you need help with (optional)"></textarea></div><button class="apt-submit" type="submit">Continue on WhatsApp</button><div class="apt-note">This website does not store the information entered here. WhatsApp opens with a pre-filled appointment request.</div></form></div></div>
 <script id="appointment-modal-script">(()=>{const modal=document.getElementById('appointmentModal');if(!modal)return;const form=document.getElementById('appointmentPopupForm');const open=()=>{modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';document.body.classList.add('apt-lock');setTimeout(()=>document.getElementById('aptName')?.focus(),50)};const close=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.documentElement.style.overflow='';document.body.classList.remove('apt-lock')};document.addEventListener('click',e=>{const el=e.target&&e.target.closest?e.target.closest('[data-appointment-modal="1"]'):null;if(el){e.preventDefault();e.stopPropagation();open()}},true);modal.querySelector('.apt-close')?.addEventListener('click',e=>{e.preventDefault();close()});modal.addEventListener('click',e=>{if(e.target===modal)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});form?.addEventListener('submit',e=>{e.preventDefault();const d=new FormData(form),name=String(d.get('name')||'').trim(),phone=String(d.get('phone')||'').trim();if(!name||!phone){alert('Please enter your name and phone number.');return}const lines=['Hello Nanak Dental Clinic, I would like to request an appointment.','Name: '+name,'Phone: '+phone,'Treatment / Reason: '+String(d.get('service')||'General consultation'),'Preferred date: '+String(d.get('date')||'Flexible'),'Preferred time: '+String(d.get('time')||'Flexible'),'Note: '+String(d.get('message')||'No additional note')];location.href='https://wa.me/919999608619?text='+encodeURIComponent(lines.join('\\n'))})})();</script>
-<!-- nanak-v3-fresh-mobile -->`;
+<!-- nanak-v4-original-hero-mobile-popup -->`;
 
-  if (!html.includes('nanak-v3-fresh-mobile')) html = html.replace(/<\/body>/i, modal + '</body>');
+  if (!html.includes('nanak-v4-original-hero-mobile-popup')) html = html.replace(/<\/body>/i, modal + '</body>');
 
   res.status(upstream.status);
   res.setHeader('content-type', 'text/html; charset=utf-8');
@@ -61,6 +55,6 @@ module.exports = async function handler(req, res) {
   res.setHeader('vercel-cdn-cache-control', 'no-store');
   res.setHeader('pragma', 'no-cache');
   res.setHeader('expires', '0');
-  res.setHeader('x-nanak-version', 'v3-fresh-mobile');
+  res.setHeader('x-nanak-version', 'v4-original-hero-mobile-popup');
   return res.send(html);
 };
