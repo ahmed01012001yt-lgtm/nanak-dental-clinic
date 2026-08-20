@@ -6,9 +6,16 @@
     }
   },
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/proxy"
-    }
+    { "source": "/", "destination": "/api/proxy?site=index" },
+    { "source": "/pooja-dental-clinic", "destination": "/api/proxy?site=pooja-dental-clinic" },
+    { "source": "/dental-solution-kalkaji", "destination": "/api/proxy?site=dental-solution-kalkaji" },
+    { "source": "/chotalla-clinic-dental", "destination": "/api/proxy?site=chotalla-clinic-dental" },
+    { "source": "/ganesh-dental-care-kalkaji", "destination": "/api/proxy?site=ganesh-dental-care-kalkaji" },
+    { "source": "/olive-dental-clinic-cr-park", "destination": "/api/proxy?site=olive-dental-clinic-cr-park" },
+    { "source": "/ellevate-dental-kalkaji", "destination": "/api/proxy?site=ellevate-dental-kalkaji" },
+    { "source": "/dr-adils-dental-facial-aesthetic", "destination": "/api/proxy?site=dr-adils-dental-facial-aesthetic" },
+    { "source": "/mera-dent-govindpuri", "destination": "/api/proxy?site=mera-dent-govindpuri" },
+    { "source": "/smile-genie-dental-clinic", "destination": "/api/proxy?site=smile-genie-dental-clinic" },
+    { "source": "/chaitanya-dental-clinic-govindpuri", "destination": "/api/proxy?site=chaitanya-dental-clinic-govindpuri" }
   ]
 }
